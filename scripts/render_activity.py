@@ -21,6 +21,13 @@ THEMES = {
 }
 SERIF = "Newsreader, Georgia, 'Times New Roman', serif"
 MONO = "ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
+STYLE = (
+    ".bar{transform-box:fill-box;transform-origin:left center;animation:grow 1.1s cubic-bezier(.2,.7,.2,1) both}"
+    ".num{animation:fade .6s ease-out both}"
+    "@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}"
+    "@keyframes fade{from{opacity:0}to{opacity:1}}"
+    "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
+)
 
 
 def graphql(query: str, token: str) -> dict:
@@ -131,12 +138,14 @@ def render(stats: dict, theme: dict) -> str:
         bar = max(2.0, max_bar * total / peak)
         opacity = 1 if is_current else 0.45
         parts.append(text(pad, y + 12, name, size=12, color=theme["muted"], family=MONO))
+        delay = 0.12 * i
         parts.append(
-            f'<rect x="{pad + label_w}" y="{y + 2}" width="{bar:.1f}" height="12" '
-            f'fill="{theme["accent"]}" fill-opacity="{opacity}" />'
+            f'<rect class="bar" style="animation-delay:{delay:.2f}s" x="{pad + label_w}" y="{y + 2}" '
+            f'width="{bar:.1f}" height="12" fill="{theme["accent"]}" fill-opacity="{opacity}" />'
         )
         parts.append(
             text(pad + label_w + bar + 8, y + 13, f"{total:,}", size=14, color=theme["ink"], family=SERIF)
+            .replace("<text ", f'<text class="num" style="animation-delay:{delay + 0.8:.2f}s" ', 1)
         )
 
     summary = (
@@ -146,7 +155,7 @@ def render(stats: dict, theme: dict) -> str:
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" aria-labelledby="t d">'
-        f'<title id="t">GitHub activity</title><desc id="d">{escape(summary)}</desc>'
+        f'<title id="t">GitHub activity</title><desc id="d">{escape(summary)}</desc><style>{STYLE}</style>'
         + "".join(parts)
         + "</svg>\n"
     )
