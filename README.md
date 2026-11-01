@@ -10,4 +10,4 @@
   <img alt="GitHub activity: contributions by year" src="https://raw.githubusercontent.com/weixijia/weixijia/output/activity-light.svg" width="100%" />
 </picture>
 
-<sub>Activity counts include private repositories; most research code stays private until publication. Visitor locations are approximate, and no IP addresses are stored. Papers and talks are on <a href="https://www.xijiawei.com/?ref=github">xijiawei.com</a>.</sub>
+<sub><a href="https://www.xijiawei.com/?ref=github">xijiawei.com</a></sub>
